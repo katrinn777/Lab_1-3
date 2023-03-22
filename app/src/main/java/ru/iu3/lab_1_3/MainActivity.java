@@ -7,9 +7,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -31,6 +33,42 @@ interface TransactionEvents {
 
 public class MainActivity extends AppCompatActivity implements TransactionEvents {
 
+    protected String getPageTitle(String html)
+    {
+        int pos = html.indexOf("<title");
+        String p="not found";
+        if (pos >= 0)
+        {
+            int pos2 = html.indexOf("<", pos + 1);
+            if (pos >= 0)
+                p = html.substring(pos + 7, pos2);
+        }
+        return p;
+    }
+
+    protected void testHttpClient()
+    {
+        new Thread(() -> {
+            try {
+                HttpURLConnection uc = (HttpURLConnection)
+                        (new URL("https://www.wikipedia.org").openConnection());
+                InputStream inputStream = uc.getInputStream();
+                String html = IOUtils.toString(inputStream);
+                String title = getPageTitle(html);
+                runOnUiThread(() ->
+                {
+                    Toast.makeText(this, title, Toast.LENGTH_LONG).show();
+                });
+
+            } catch (Exception ex) {
+                Log.e("fapptag", "Http client fails", ex);
+            }
+        }).start();
+    }
+    public void onButtonClick(android.view.View view) {
+        testHttpClient();
+        //startActivity(it);
+    }
     private String pin;
     ActivityResultLauncher activityResultLauncher;
 
@@ -42,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements TransactionEvents
 
     private ActivityMainBinding binding;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         int init = initRng();
@@ -49,6 +88,13 @@ public class MainActivity extends AppCompatActivity implements TransactionEvents
         setContentView(R.layout.activity_main);
         Button btn = (Button) findViewById(R.id.btn);
         btn.setText(stringFromJNI());
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testHttpClient();
+            }
+        });
 
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
