@@ -1,4 +1,4 @@
-package com.example.backend.controllers;
+package com.example.BMSTU_SD.backend.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SampleController {
     @GetMapping("/title")
     public String getTitle() {
-        return "<title>Hello from Back-end</title>";
+        return "<title>Hello from Backend</title>";
     }
 }
