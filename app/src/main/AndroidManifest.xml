@@ -10,8 +10,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Lab_13"
+        android:theme="@style/Theme.BMSTU_project"
         tools:targetApi="31">
+        <activity
+            android:name=".FourthPart"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionEvents"
+            android:exported="false" />
+        <activity
+            android:name=".ThirdPart"
+            android:exported="false" />
         <activity
             android:name=".PinpadActivity"
             android:exported="false" />
@@ -25,7 +34,5 @@
             </intent-filter>
         </activity>
     </application>
-
-<uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

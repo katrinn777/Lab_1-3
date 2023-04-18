@@ -7,21 +7,35 @@ cmake_minimum_required(VERSION 3.22.1)
 
 # Declares and names the project.
 
-project("lab_1_3")
+project("bmstu_project")
+
+
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-add_library( # Sets the name of the library.
-        lab_1_3
 
-        # Sets the library as a shared library.
-        SHARED
+add_library(bmstu_project SHARED native-lib.cpp)
+add_library(spdlog STATIC IMPORTED)
+add_library(mbedcrypto SHARED IMPORTED)
 
-        # Provides a relative path to your source file(s).
-        native-lib.cpp)
+set_target_properties(spdlog PROPERTIES IMPORTED_LOCATION
+        C:/Users/Name040220/Desktop/project/BMSTU_SD_project/libs/spdlog/build/x86_64/libspdlog.a)
+set_target_properties(mbedcrypto PROPERTIES IMPORTED_LOCATION
+        C:/Users/Name040220/Desktop/project/BMSTU_SD_project/app/src/main/nativeLibs/x86_64/libmbedcrypto.so
+        )
+
+target_include_directories(bmstu_project PUBLIC
+        C:/Users/Name040220/Desktop/project/BMSTU_SD_project/libs/spdlog/spdlog/include
+        C:/Users/Name040220/Desktop/project/BMSTU_SD_project/libs/mbedits/mbedtls/include)
+
+target_link_libraries( # Specifies the target library.
+        bmstu_project
+        spdlog
+        mbedcrypto
+        log)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -36,23 +50,7 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
-add_library(spdlog STATIC IMPORTED)
-set_target_properties(spdlog PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_CURRENT_SOURCE_DIR}/native-libs/spdlog/build/${ANDROID_ABI}/libspdlog.a)
+# Specifies libraries CMake should link to your target library. You
+# can link multiple libraries, such as libraries you define in this
+# build script, prebuilt third-party libraries, or system libraries.
 
-
-add_library(mbedcrypto STATIC IMPORTED)
-set_target_properties(mbedcrypto PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_CURRENT_SOURCE_DIR}/native-libs/mbedtls/build/${ANDROID_ABI}/library/libmbedcrypto.so)
-
-
-target_include_directories(lab_1_3 PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/native-libs/spdlog/spdlog/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/native-libs/mbedtls/mbedtls/include)
-target_link_libraries( # Specifies the target library.
-        lab_1_3
-        spdlog
-        mbedcrypto
-        # Links the target library to the log library
-        # included in the NDK.
-        ${log-lib})
